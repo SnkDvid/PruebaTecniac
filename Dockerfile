@@ -18,9 +18,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy the application code
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader || { cat /var/www/html/vendor/composer/installed.json; exit 1; }
-
 # Expose port 80
 EXPOSE 80
 
