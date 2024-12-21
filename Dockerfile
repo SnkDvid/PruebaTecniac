@@ -15,14 +15,15 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Copy composer files and install PHP dependencies
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader
+
 # Copy the application code
 COPY . .
 
 # Set the document root to the public directory
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf /etc/apache2/apache2.conf
-
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
