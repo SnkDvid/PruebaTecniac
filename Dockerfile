@@ -8,13 +8,15 @@ WORKDIR /var/www/html
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libpq-dev \
+    unzip \
+    git \
     && docker-php-ext-install intl pdo pdo_pgsql
-
-# Copy the application code
-COPY . .
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy the application code
+COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
