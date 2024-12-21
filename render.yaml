@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: PruebaTecnica
+    env: php
+    plan: free
+    buildCommand: composer install --no-dev --optimize-autoloader
+    startCommand: apache2-foreground
+    envVars:
+      - key: NODE_ENV
+        value: production
+    staticPublishPath: public
