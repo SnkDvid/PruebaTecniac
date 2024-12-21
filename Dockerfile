@@ -22,7 +22,7 @@ COPY . .
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf /etc/apache2/apache2.conf
 
 # Install PHP dependencies
-RUN composer install 
+#RUN composer install 
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
