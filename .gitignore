@@ -27,3 +27,6 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 .vercel
+
+# Local Netlify folder
+.netlify
