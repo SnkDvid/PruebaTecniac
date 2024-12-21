@@ -1,0 +1,265 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Estudiantes{% endblock %}
+
+{% block body %}
+<Style>
+body {
+    background-color: #f8f9fa;
+}
+</Style>
+    <div class="container mt-5">
+        <h1 class="mb-4">Listado de Estudiantes</h1>
+
+        {% for message in app.flashes('exito') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+       
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearEstudianteModal">
+                Registrar Nuevo Estudiante
+            </button>
+{% if estudiantes is empty %} <!-- condicional si no hay estudiantes registrados -->
+                <div class="alert alert-warning mt-4">
+                    No hay estudiantes registrados, Registra uno ahora!
+                </div>
+                {% else %} <!-- condicional si hay estudiantes registrados, Muestra la tabla -->
+    <button type="button" class="btn btn-danger">
+        <a href="{{ path('estudiantes_pdf') }}" style="color: white; text-decoration: none;">Descargar PDF</a>
+    </button>
+    <br><br>
+            <table id="estudiantesTable" class="table table-bordered mt-4 table-striped">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Nº Estudiante</th>
+                        <th>Nombre</th>
+                        <th>Salón</th>
+                        <th>Acudiente</th>
+                        <th>Edad</th>
+                        <th>Género</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estudiante in estudiantes %}
+                        <tr>
+                            <td>{{ estudiante.id }}</td>
+                            <td>{{ estudiante.nombre }}</td>
+                            <td>{{ estudiante.salon }}</td>
+                            <td>{{ estudiante.acudiente }}</td>
+                            <td>{{ estudiante.edad }}</td>
+                            <td>{{ estudiante.genero }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarEstudianteModal--{{ estudiante.id }}">
+                                Editar</button>
+                           
+                            <a href="{{ path('estudiantes_inhabilitar', {'id': estudiante.id}) }}" class="btn btn-danger btn-inhabilitar" data-id="{{ estudiante.id }}">Inhabilitar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+{% endif %}
+
+       <div class="modal fade" id="crearEstudianteModal" tabindex="-1" aria-labelledby="crearEstudianteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="crearEstudianteModalLabel">Registrar Nuevo Estudiante</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="crearEstudianteForm" action="{{ path('estudiantes_crear') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre">
+                    </div>
+                    <div class="mb-3">
+                        <label for="salon" class="form-label">Salón</label>
+                        <input type="text" class="form-control" id="salon" name="salon">
+                    </div>
+                    <div class="mb-3">
+                        <label for="acudiente" class="form-label">Acudiente</label>
+                        <input type="text" class="form-control" id="acudiente" name="acudiente">
+                    </div>
+                    <div class="mb-3">
+                    <label for="edad" class="form-label">Edad</label>
+                        <input type="number" class="form-control" id="edad" name="edad">
+                    </div>
+                    <div class="mb-3">
+                        <label for="genero" class="form-label">Género</label>
+                        <div>
+                        <input type="radio" class="form-check-input" id="genero_masculino" name="genero" value="Masculino">
+                        <label class="form-check-label" for="genero_masculino">Masculino</label>
+                        </div>
+                        <div>
+                        <input type="radio" class="form-check-input" id="genero_femenino" name="genero" value="Femenino">
+                        <label class="form-check-label" for="genero_femenino">Femenino</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Estudiante -->
+{% for estudiante in estudiantes %}
+<div class="modal fade" id="editarEstudianteModal--{{ estudiante.id }}" tabindex="-1" aria-labelledby="editarEstudianteModalLabel--{{ estudiante.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarEstudianteModalLabel--{{ estudiante.id }}">Editar Estudiante</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ path('estudiantes_editar', {'id': estudiante.id}) }}" method="POST">
+                <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ estudiante.nombre }}">
+                </div>
+                <div class="mb-3">
+                <label for="salon" class="form-label">Salón</label>
+                 <input type="text" class="form-control" id="salon" name="salon" value="{{ estudiante.salon }}">
+                </div>
+                <div class="mb-3">
+                <label for="acudiente" class="form-label">Acudiente</label>
+                <input type="text" class="form-control" id="acudiente" name="acudiente" value="{{ estudiante.acudiente }}">
+                </div>
+                <div class="mb-3">
+                <label for="edad" class="form-label">Edad</label>
+                <input type="number" class="form-control" id="edad" name="edad" value="{{ estudiante.edad }}">
+                </div>
+                <div class="mb-3">
+                <label for="genero" class="form-label">Género</label>
+                <div>
+                <input type="radio" class="form-check-input" id="genero_masculino" name="genero" value="Masculino" {% if estudiante.genero == 'Masculino' %} checked {% endif %}>
+                <label class="form-check-label" for"genero_masculino__{{ estudiante.id }}">Masculino</label>
+                </div>
+                <div>
+                <input type="radio" class="form-check-input" id="genero_femenino" name="genero" value="Femenino" {% if estudiante.genero == 'Femenino' %} checked {% endif %}>
+                <label class="form-check-lable" for="genero_femenino__{{ estudiante.id }}">Femenino</label>
+                </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Edicion</button>
+                <button type="button" class="btn btn-danger">Cancelar</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+        </div>
+        <!-- JavaScript para funciones de la tabla -->
+        <script>
+    $(document).ready(function() {
+        $('#estudiantesTable').DataTable({
+            language: {
+        url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-ES.json',
+    },
+            
+        });
+    });
+</script>
+
+<!-- JavaScript para SweetAlert y validaciones -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+document.querySelectorAll('.btn-inhabilitar').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const id = this.getAttribute('data-id');
+        const url = this.getAttribute('href');
+
+        Swal.fire({
+            title: '¿Estás seguro de inhabilitar este estudiante?',
+            text: "¡Puedes revertirlo después!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, inhabilitar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+});
+
+document.querySelectorAll('.btn-editar').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const id = this.getAttribute('data-id');
+        const url = this.getAttribute('href');
+
+        Swal.fire({
+            title: '¿Estas seguro de actualizar este registro?',
+            text: "¡Revisa muy bien!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Si, Guardar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+});
+
+document.getElementById('crearEstudianteForm').addEventListener('submit', function(event) {
+    let valid = true;
+    let errorMessage = '';
+
+    const nombre = document.getElementById('nombre').value;
+    const salon = document.getElementById('salon').value;
+    const acudiente = document.getElementById('acudiente').value;
+    const edad = document.getElementById('edad').value;
+    const generoMasculino = document.getElementById('genero_masculino').checked;
+    const generoFemenino = document.getElementById('genero_femenino').checked;
+
+    if(!nombre) {
+        valid = false;
+        errorMessage += 'El nombre no puede estar vacío.<br>';
+    }
+    if(!salon) {
+        valid = false;
+        errorMessage += 'El salon no puede estar vacío.<br>';
+    }
+    if(!acudiente) {
+        valid = false;
+        errorMessage += 'El acudiente no puede estar vacío.<br>';
+    }
+    if(!edad || edad <= 0) {
+        valid = false;
+        errorMessage += 'La edad no puede estar vacía.<br>';
+    }
+    if(!generoMasculino && !generoFemenino) {
+        valid = false;
+        errorMessage += 'Tiene que selecionar al menos un genero.<br>';
+    }
+    if(!valid) {
+        event.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores de validacion',
+            html: errorMessage,
+        });
+    }
+});
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Estudiantes{% endblock %}
+
+{% block body %}
+<Style>
+body {
+    background-color: #f8f9fa;
+}
+</Style>
+    <div class="container mt-5">
+        <h1 class="mb-4">Listado de Estudiantes Inhbilitados</h1>
+
+        {% for message in app.flashes('exito') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+{% if estudiantes is empty %} <!-- condicional si no hay estudiantes registrados -->
+                <div class="alert alert-warning mt-4">
+                    No hay ningun estudiante inhabilitado por ahora.
+                </div>
+                {% else %} <!-- condicional si hay estudiantes registrados, Muestra la tabla -->
+    <br><br>
+            <table id="estudiantesTable" class="table table-bordered mt-4 table-striped">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Nº Estudiante</th>
+                        <th>Nombre</th>
+                        <th>Salón</th>
+                        <th>Acudiente</th>
+                        <th>Edad</th>
+                        <th>Género</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estudiante in estudiantes %}
+                        <tr>
+                            <td>{{ estudiante.id }}</td>
+                            <td>{{ estudiante.nombre }}</td>
+                            <td>{{ estudiante.salon }}</td>
+                            <td>{{ estudiante.acudiente }}</td>
+                            <td>{{ estudiante.edad }}</td>
+                            <td>{{ estudiante.genero }}</td>
+                            <td>
+                                <a href="{{ path('estudiantes_habilitar', {'id': estudiante.id}) }}" class="btn btn-success">Habilitar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+{% endif %}
+
+        </div>
+        <script>
+    $(document).ready(function() {
+        $('#estudiantesTable').DataTable({
+            language: {
+        url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-ES.json',
+    },
+            
+        });
+    });
+</script>
+
+
+{% endblock %}

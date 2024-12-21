@@ -1,0 +1,8 @@
+# filepath: /c:/xampp/htdocs/PruebaTecnica/config/packages/knp_snappy.yaml
+knp_snappy:
+    pdf:
+        enabled: true
+        binary: 'D:\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    image:
+        enabled: true
+        binary: 'D:\wkhtmltopdf\bin\wkhtmltoimage.exe'

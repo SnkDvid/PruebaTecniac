@@ -1,0 +1,31 @@
+#ruta para el index
+estudiantes:
+    path: /
+    controller: App\Controller\Backend\EstudiantesController::index
+#ruta para crear un estudiante
+estudiantes_crear:
+    path: /crear
+    controller: App\Controller\Backend\EstudiantesController::crear
+#ruta para editar un estudiante
+estudiantes_editar:
+    path: /editar/{id}
+    controller: App\Controller\Backend\EstudiantesController::editar
+
+#ruta para inhabilitar un estudiante
+estudiantes_inhabilitar:
+    path: /inhabilitar/{id}
+    controller: App\Controller\Backend\EstudiantesController::inhabilitar
+#ruta para habilitar un estudiante
+estudiantes_habilitar:
+    path: /habilitar/{id}
+    controller: App\Controller\Backend\EstudiantesController::habilitar
+#ruta para ver los estudiantes inhabilitados
+estudiantes_inhabilitados:
+    path: /inhabilitados
+    controller: App\Controller\Backend\EstudiantesController::inhabilitados
+#ruta para ver los estudiantes en pdf
+estudiantes_pdf:
+    path: /pdf
+    controller: App\Controller\Backend\EstudiantesController::pdf
+
+
